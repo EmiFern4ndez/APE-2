@@ -42,36 +42,97 @@ void mostrarRubik(int matriz[tope][tope], int tam){
     }
 }
 
+void izquierda(int matriz[tope][tope], int tam, int fila){
+    int aux;
+    aux = matriz[fila][0];      // Guarda el último  (en realidad es el primer elemnto) antes de que se sobrescriba
+    for (int i=0; i<tam-1; i++){
+        matriz[fila][i] = matriz[fila][i+1];    // Mueve cada elemento un lugar hacia la izquierda
+    }
+    matriz[fila][tam-1] = aux;
+}
+
+void derecha(int matriz[tope][tope], int tam, int fila){
+    int aux;
+    aux = matriz[fila][tam - 1];    // Guarda el último elemento antes de que se sobrescriba
+    for (int j=tam-1; j>0; j--) {
+        matriz[fila][j] = matriz[fila][j-1];    // Mueve cada elemento un lugar hacia la derecha
+    }
+    matriz[fila][0] = aux;  // Asigna el último elemento al primer lugar
+}
+
+void arriba(int matriz[tope][tope], int tam, int colum){
+    int aux;
+    aux = matriz[0][colum];     // Guarda el último elemento antes de que se sobrescriba
+    for (int i=0; i<tam-1; i++){
+        matriz[i][colum] = matriz[i+1][colum];  // Mueve cada elemento un lugar hacia arriba
+    }
+    matriz[tam-1][colum] = aux;
+}
+
+void abajo(int matriz[tope][tope], int tam, int colum){
+    int aux;
+    aux = matriz[tam-1][colum];     // Guarda el último  (en realidad es el primer elemnto) antes de que se sobrescriba
+    for (int i=tam-1; i>0; i--){
+        matriz[i][colum] = matriz[i+1][colum];  // Mueve cada elemento un lugar hacia abajo
+    }
+    matriz[0][colum] = aux;
+}
+
 void jugar(int matriz[tope][tope], int tam){
     char movimiento;
-    printf("i) Izquierda\n d) Derecha\n a) Arrbia\n b) Abajo\n v) Volver al menu\n");
-    scanf("%c ", &movimiento);
-    while (movimiento != 'v'){
-        switch (movimiento){
+    int fila, columna;
+    printf(" i) Izquierda\n d) Derecha\n a) Arriba\n b) Abajo\n v) Volver al menú\n");
+    while (1) {     //Esto crea un bucle hasta encontrar un break
+        printf("Elige un movimiento: ");
+        scanf(" %c", &movimiento);
+        if (movimiento == 'v') {
+            break;
+        }
+        switch (movimiento) {
             case 'i':
-                /* izquierda(matriz,tam); */
+                printf("Ingrese la fila:\n");
+                scanf("%d", &fila);
+                if (fila < 1 || fila > tam){
+                    printf("Fila invalida, ingrese otra.\n");
+                    scanf("%d", &fila);
+                }
+                izquierda(matriz,tam,fila-1);
                 mostrarRubik(matriz,tam);
                 break;
             case 'd':
-                /* derecha(matriz,tam); */
+                printf("Ingrese la fila:\n");
+                scanf("%d", &fila);
+                if (fila < 1 || fila > tam){
+                    printf("Fila invalida, ingrese otra.\n");
+                    scanf("%d", &fila);
+                }
+                derecha(matriz, tam,fila-1);
                 mostrarRubik(matriz,tam);
                 break;
             case 'a':
-                /* arriba(matriz,tam); */
-                mostrarRubik(matriz,tam);
+                printf("Ingrese la columna:\n");
+                scanf("%d", &columna);
+                if (fila < 1 || columna > tam){
+                    printf("columna invalida, ingrese otra.\n");
+                    scanf("%d", &columna);
+                }
+                arriba(matriz,tam,columna);
+                mostrarRubik(matriz, tam);
                 break;
             case 'b':
-                /* abajo(matriz,tam); */
+                printf("Ingrese la columna:\n");
+                scanf("%d", &columna);
+                if (fila < 1 || columna > tam){
+                    printf("columna invalida, ingrese otra.\n");
+                    scanf("%d", &columna);
+                }
+                abajo(matriz,tam,columna);
                 mostrarRubik(matriz,tam);
                 break;
-            case 'v':
-                break;
             default:
-                printf("Movimiento no valido.\n");
+                printf("Movimiento no válido.\n");
                 break;
         }
-        printf("i) Izquierda\n d) Derecha\n a) Arrbia\n b) Abajo\n v) Volver al menu\n");
-        scanf("%c ", &movimiento);
     }
 }
 
