@@ -11,14 +11,14 @@ void menu(int *opcion){
     scanf("%d", opcion);
 }
 
-void inicializarMatiz(int matriz[tope][tope], int cantColors){
+/* void inicializarMatiz(int matriz[tope][tope], int cantColors){
     srand(time(NULL));      //Hace que los numeros que simulan los colores sean diferentes en cada ejecucion del programa
     for (int i=0; i<cantColors; i++){
         for (int j=0; j<cantColors; j++){
             matriz[i][j] = rand() % cantColors+1;       //Genera numeros random simulando los colores
         }
     }
-}
+} */
 
 void inicializarMatizAMano(int matriz[tope][tope], int tam){
     int color = 0;
