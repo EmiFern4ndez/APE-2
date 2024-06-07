@@ -15,7 +15,18 @@ void inicializarMatiz(int matriz[tope][tope], int cantColors){
     srand(time(NULL));      //Hace que los numeros que simulan los colores sean diferentes en cada ejecucion del programa
     for (int i=0; i<cantColors; i++){
         for (int j=0; j<cantColors; j++){
-            matriz[i][j] = rand() % cantColors+1;
+            matriz[i][j] = rand() % cantColors+1;       //Genera numeros random simulando los colores
+        }
+    }
+}
+
+void inicializarMatizAMano(int matriz[tope][tope], int tam){
+    int color = 0;
+    for (int i=0; i<tam; i++){
+        for (int j=0; j<tam; j++){
+            printf("COLOR DE CELDA: %d %d\n",i+1,j+1);
+            scanf("%d", &color);
+            matriz[i][j] = color;
         }
     }
 }
@@ -30,7 +41,8 @@ void elegirRubik(int *tam, int matriz[tope][tope]){
     printf("--------------\n");
     printf("|Cargandoo...|\n");
     printf("--------------\n");
-    inicializarMatiz(matriz,*tam);
+    /* inicializarMatiz(matriz,*tam); */
+    inicializarMatizAMano(matriz,*tam);
 }
 
 void mostrarRubik(int matriz[tope][tope], int tam){
@@ -78,7 +90,7 @@ void abajo(int matriz[tope][tope], int tam, int colum){
     matriz[0][colum] = aux;
 }
 
-void recorrerFilas(int matriz[tope][tope], int tam, int *ok){
+void recorrerFilas(int matriz[tope][tope], int tam, int *ok, int *filas){
     for (int i=0; i<tam; i++){
         int fila_igual = 1;
         for (int j = 1; j < tam; j++) {
@@ -88,13 +100,16 @@ void recorrerFilas(int matriz[tope][tope], int tam, int *ok){
             }
         }
         if (fila_igual) {
-            *ok = 1;
-            break;
+            (*filas)++;
+            if (*filas == 3) {
+                *ok = 1;
+                return;
+            }
         }
     }
 }
 
-void recorrerColumnas(int matriz[tope][tope], int tam, int *ok){
+void recorrerColumnas(int matriz[tope][tope], int tam, int *ok, int *columnas){
     for (int j = 0; j < tam; j++) {
         int columna_igual = 1;
         for (int i = 1; i < tam; i++) {
@@ -104,30 +119,29 @@ void recorrerColumnas(int matriz[tope][tope], int tam, int *ok){
             }
         }
         if (columna_igual) {
-            *ok = 1;
-            break;
+            (*columnas)++;
+            if (*columnas == 3) {
+                *ok = 1;
+                return;
+            }
         }
     }
 }
 
 void verificar(int matriz[tope][tope], int tam, int *ok){
-    recorrerFilas(matriz, tam, ok);
-    if (ok) {
-         printf("¡GANASTE!\n");
-    } else {
-        recorrerColumnas(matriz, tam, ok);
-        if (*ok) {
-            printf("¡GANASTE!\n");
-        } else {
-            printf("NO GANASTE, SIGUE JUGANDO\n");
-        }
-    }     
+    int filas=0;
+    int columnas=0;
+    recorrerFilas(matriz, tam, ok,&filas);
+    recorrerColumnas(matriz, tam, ok,&columnas);
+    if (filas == 3 || columnas == 3){
+        printf("GANASTE\n");
+    }
 }
 
 void jugar(int matriz[tope][tope], int tam){
     char movimiento;
-    int fila, columna,ok;
-    ok=0;
+    int fila, columna, ok;
+    ok = 0;
     printf(" i) Izquierda\n d) Derecha\n a) Arriba\n b) Abajo\n v) Volver al menu\n");
     while (ok != 1) {     //Esto crea un bucle hasta encontrar un break
         printf("Elige un movimiento: ");
@@ -142,10 +156,11 @@ void jugar(int matriz[tope][tope], int tam){
                 if (fila < 1 || fila > tam){
                     printf("Fila invalida, ingrese otra.\n");
                     scanf("%d", &fila);
+                } else{
+                    izquierda(matriz, tam,fila-1);
+                    mostrarRubik(matriz,tam);
+                    verificar(matriz,tam,&ok);
                 }
-                izquierda(matriz,tam,fila-1);
-                mostrarRubik(matriz,tam);
-                verificar(matriz,tam,&ok);
                 break;
             case 'd':
                 printf("Ingrese la fila:\n");
@@ -153,10 +168,11 @@ void jugar(int matriz[tope][tope], int tam){
                 if (fila < 1 || fila > tam){
                     printf("Fila invalida, ingrese otra.\n");
                     scanf("%d", &fila);
+                } else{
+                    derecha(matriz, tam,fila-1);
+                    mostrarRubik(matriz,tam);
+                    verificar(matriz,tam,&ok);
                 }
-                derecha(matriz, tam,fila-1);
-                mostrarRubik(matriz,tam);
-                verificar(matriz,tam,&ok);
                 break;
             case 'a':
                 printf("Ingrese la columna:\n");
@@ -164,10 +180,11 @@ void jugar(int matriz[tope][tope], int tam){
                 if (columna < 1 || columna > tam){
                     printf("Columna invalida, ingrese otra.\n");
                     scanf("%d", &columna);
+                } else{
+                    arriba(matriz,tam,columna-1);
+                    mostrarRubik(matriz, tam);
+                    verificar(matriz,tam,&ok);
                 }
-                arriba(matriz,tam,columna-1);
-                mostrarRubik(matriz, tam);
-                verificar(matriz,tam,&ok);
                 break;
             case 'b':
                 printf("Ingrese la columna:\n");
@@ -175,10 +192,11 @@ void jugar(int matriz[tope][tope], int tam){
                 if (columna < 1 || columna > tam){
                     printf("Columna invalida, ingrese otra.\n");
                     scanf("%d", &columna);
+                } else{
+                    abajo(matriz,tam,columna-1);
+                    mostrarRubik(matriz,tam);
+                    verificar(matriz,tam,&ok);
                 }
-                abajo(matriz,tam,columna-1);
-                mostrarRubik(matriz,tam);
-                verificar(matriz,tam,&ok);
                 break;
             default:
                 printf("Movimiento no válido.\n");
@@ -186,7 +204,6 @@ void jugar(int matriz[tope][tope], int tam){
         }
     }
 }
-
 
 
 int main()
