@@ -47,5 +47,6 @@
 
 - Emiliano Fernandez
 - Lautaro Morales
+- Gabriel Ruiz
 
 ---
